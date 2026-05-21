@@ -1,3 +1,10 @@
+cd ~/koko-github
+
+# លុប file ចាស់
+rm .github/workflows/build.yml
+
+# បង្កើត file ថ្មីដោយប្រើ cat
+cat > .github/workflows/build.yml << 'EOF'
 name: Build Windows EXE
 
 on:
@@ -10,10 +17,10 @@ jobs:
     runs-on: windows-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
     
@@ -28,7 +35,11 @@ jobs:
         pyinstaller --onefile --windowed --name WindowsUpdate koko_client_win_v6_corrected.py
     
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: WindowsUpdate
         path: dist/WindowsUpdate.exe
+EOF
+
+echo "✅ build.yml created successfully!"
+
